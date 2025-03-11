@@ -2,12 +2,12 @@
 * 김태경
     * 팀장
     * main BACKEND
-    * sub FRONTEND
+    * main FRONTEND
     * 검토 & 수정 & 보완
 * 김규아
     * 팀원
-    * main BACKEND
-    * main FRONTEND
+    * sub BACKEND
+    * sub FRONTEND
     * API관련 업무
 
 
