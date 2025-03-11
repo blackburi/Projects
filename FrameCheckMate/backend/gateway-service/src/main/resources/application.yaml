@@ -1,0 +1,60 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: FRAME-CHECKMATE-GATEWAY
+  cloud:
+    default-filters:
+      - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      httpclient:
+        connect-timeout: 10000
+        response-timeout: 20s
+      routes:
+        - id: card-service
+          uri: lb://CARD-SERVICE
+          predicates:
+            - Path=/api/card/**, /api/frame/**
+        #          filters:
+        #            - AuthorizationHeaderFilter
+        - id: member-service-post
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/api/member/**
+            - Method=POST
+        - id: member-service-get
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/api/member/**
+            - Method=GET
+          filters:
+            - AuthorizationHeaderFilter
+        - id: project-service
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/api/project/**
+          filters:
+            - AuthorizationHeaderFilter
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=api/v1/notification/**
+        - id: ai-service
+          uri: lb://AI-SERVICE
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - StripPrefix=2
+
+jwt:
+  secret: ${JWT_SECRET}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URI}
